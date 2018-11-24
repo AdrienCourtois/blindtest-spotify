@@ -39,6 +39,22 @@ class GameController{
             }
         });
     }
+
+    getUserPoints(user, game_id, callback){
+        GameService.getGameByID(game_id, function(err, game){
+            if (err === null){
+                var points = GameService.getUserPoints(game, user);
+
+                callback(null, points);
+            } else {
+                callback(err, null);
+            }
+        });
+    }
+
+    getUserGame(user, callback){
+        GameService.getUserGame(user, callback);
+    }
 }
 
 module.exports = new GameController();

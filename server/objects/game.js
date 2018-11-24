@@ -5,9 +5,9 @@ class Game{
         this.id = id;
         this.name = name;
         this.theme_id = theme_id;
-        this.active = (!active) ? 1 : active;
-        this.users = (!users) ? '' : users;
-        this.points = (!points) ? '' : points;
+        this.active = (typeof(active) == "undefined") ? 1 : active;
+        this.users = (typeof(users) == "undefined") ? '' : users;
+        this.points = (typeof(points) == "undefined") ? '' : points;
         this.creation_date = creation_date;
     }
 

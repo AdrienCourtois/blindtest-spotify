@@ -68,4 +68,24 @@ router.post('/leave', urlencodedParser, function(req, res){
     });
 });
 
+router.post('/points', urlencodedParser, function(req, res){
+    var game_id = req.body.game_id;
+
+    GameController.getUserPoints(res.locals.user, game_id, function(err, points){
+        var response = new Response(err, points);
+
+        res.status(200);
+        res.end(response.stringify());
+    });
+});
+
+router.post('/get', function(req, res){
+    GameController.getUserGame(res.locals.user, function(err, game){
+        var response = new Response(err, game);
+
+        res.status(200);
+        res.end(response.stringify());
+    });
+});
+
 module.exports = router;

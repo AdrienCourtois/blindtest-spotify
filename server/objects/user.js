@@ -5,7 +5,7 @@ class User{
         this.id = id;
         this.login = login;
         this.password = password;
-        this.game = (!game) ? 0 : game;
+        this.game = (typeof(game) == 'undefined') ? 0 : game;
         this.token = token;
     }
 

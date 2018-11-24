@@ -178,6 +178,10 @@ class GameService{
             var error = new Error('Structural error at getUserPoints', 'L\'utilisateur n\'est pas dans une partie.', 0);
             this.errorHandler.push(error);
         }
+
+        console.log(this.errorHandler);
+
+        return null;
     }
 
     /**
