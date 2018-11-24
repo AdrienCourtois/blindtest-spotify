@@ -15,4 +15,11 @@ router.post('/create', urlencodedParser, function(req, res){
     });
 });
 
+router.get('/all', function(req, res){
+    GameService.getAvailableGames(function(err, games){
+        res.status(200);
+        res.end(new Response(err, games));
+    });
+});
+
 module.exports = router;

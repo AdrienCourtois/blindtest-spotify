@@ -1,9 +1,11 @@
+const pool = require('sql').getPool();
+
 class User{
     constructor(id, login, password, game){
         this.id = id;
         this.login = login;
         this.password = password;
-        this.game = game;
+        this.game = (!game) ? 0 : game;
     }
 
     inGame(){
@@ -23,9 +25,13 @@ class User{
 
     commit(){
         if (this.id == null || !isNaN(this.id) || this.id <= 0){
-            // insert
+            var self = this;
+
+            pool.query("INSERT INTO users (login, password) VALUES (?, ?)", [this.login, this.password], function(err, quer){
+                self.id = quer.insertId;
+            });
         } else {
-            // update
+            pool.query("UPDATE users SET login = ?, password = ?, game = ? WHERE id = ?", [this.login, this.password, this.game, this.id]);
         }
     }
 
@@ -34,7 +40,23 @@ class User{
     }
 
     static getUserByLogin(login, callback){
-        // query
+        pool.query("SELECT * FROM users WHERE login = ?", [login], function(err, quer){
+            if (err === null){
+                callback(null, User.getUser(quer[0]));
+            } else {
+                callback(err, null);
+            }
+        });
+    }
+
+    static getUserByID(user_id, callback){
+        pool.query("SELECT * FROM users WHERE id = ?", [user_id], function(err, quer){
+            if (err === null){
+                callback(null, User.getUser(quer[0]));
+            } else {
+                callback(err, null);
+            }
+        });
     }
 }
 

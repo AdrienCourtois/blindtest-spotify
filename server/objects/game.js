@@ -1,11 +1,13 @@
+const pool = require('sql').getPool();
+
 class Game{
     constructor(id, name, theme_id, active, users, points, creation_date){
         this.id = id;
         this.name = name;
         this.theme_id = theme_id;
-        this.active = active;
-        this.users = users;
-        this.points = points;
+        this.active = (!active) ? 1 : active;
+        this.users = (!users) ? '' : users;
+        this.points = (!points) ? '' : points;
         this.creation_date = creation_date;
     }
 
@@ -35,14 +37,29 @@ class Game{
 
     commit(){
         if (this.id === null || isNaN(this.id) || this.id <= 0){
-            // insert
+            var self = this;
+
+            pool.query("INSERT INTO games (name, theme_id) VALUES (?, ?)", [this.name, this.theme_id], function(err, quer){
+                self.id = quer.insertId;
+                self.creation_date = "" + new Date();
+            });
         } else {
-            // update
+            pool.query("UPDATE games SET name = ?, theme_id = ?, active = ?, users = ?, points = ? WHERE id = ?", [this.name, this.theme_id, this.active, this.users, this.points, this.id]);
         }
     }
 
     static getAllActiveGames(callback){
-        // query
+        pool.query("SELECT * FROM games WHERE active = 1", function(err, quer){
+            if (err == null){
+                var result = [];
+
+                for (var i = 0 ; i < quer.length ; i++)
+                    result.push(Game.getGame(quer[i]));
+                
+                callback(null, result);
+            } else 
+                callback(err, null);
+        });
     }
 
     static getGame(obj){
@@ -50,7 +67,12 @@ class Game{
     }
 
     static getGameByID(game_id, callback){
-        // query
+        pool.query("SELECT * FROM games WHERE id = ?", [game_id], function(err, quer){
+            if (err === null)
+                callback(null, Game.getGame(quer[0]));
+            else 
+                callback(err, null);
+        });
     }
 }
 

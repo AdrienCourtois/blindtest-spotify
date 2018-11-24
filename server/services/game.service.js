@@ -1,6 +1,6 @@
 const Game = require('../objects/game');
 const User = require('../objects/user');
-const Theme = require('../objets/theme');
+const Theme = require('../objects/theme');
 const Error = require('./error');
 
 class GameService{
