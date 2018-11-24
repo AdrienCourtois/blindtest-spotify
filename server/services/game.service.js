@@ -183,45 +183,53 @@ class GameService{
     /**
      * Creates a game with the given name if possible.
      * @param {string} name The name of the game. 
-     * @param {number} theme_id The ID of the theme for the game.
+     * @param {Theme} theme_id The ID of the theme for the game.
      * @param {gameCallback} callback The callback function taking the game as parameters if it has been created and null if there was an error.
      */
-    createGame(name, theme_id, callback){
-        if (this.name.length > 1){
-            var self = this;
-
-            // checking if the given theme exists
-            Theme.getThemeByID(theme_id, function(err, theme){
-                if (err === null){
-                    if (theme !== null){
-                        var new_game = Game.getGame({
-                            theme_id: theme_id,
-                            active: 1,
-                            name: name
-                        });
-
-                        new_game.commit();
-                        
-                        callback(null, new_game);
-                    } else {
-                        var error = new Error('Injection at createGame', 'Le thème choisit n\'existe pas', 0);
-                        self.errorHandler.push(error);
-
-                        callback(error, null);
-                    }
-                } else {
-                    var error = new Error('SQL error at createGame', err, 1);
-                    self.errorHandler.push(error);
-
-                    callback(error, null);
-                }
+    createGame(name, theme, callback){
+        if (name.length > 1){
+            var new_game = Game.getGame({
+                theme_id: theme.id,
+                active: 1,
+                name: name
             });
+
+            new_game.commit();
+            
+            callback(null, new_game);
         } else {
             var error = new Error('Form input error at createGame', 'Le nom entré est trop court.', 0);
             this.errorHandler.push(error);
 
             callback(error, null);
         }
+    }
+
+    /**
+     * Retrieves the game corresponding to the given ID.
+     * @param {number} game_id The game ID.
+     * @param {gameCallback} callback The callback function taking the found game as parameter.
+     */
+    getGameByID(game_id, callback){
+        var self = this;
+
+        Game.getGameByID(game_id, function(err, game){
+            if (err === null){
+                if (game !== null){
+                    callback(null, game);
+                } else {
+                    var error = new Error('Structural error at getGameByID', 'La partie sélectionnée n\'existe pas.', 0);
+                    self.errorHandler.push(error);
+
+                    callback(error, null);
+                }
+            } else {
+                var error = new Error('SQL error at getGameByID', err, 1);
+                self.errorHandler.push(error);
+
+                callback(error, null);
+            }
+        });
     }
 }
 

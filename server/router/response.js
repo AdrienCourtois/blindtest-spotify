@@ -24,7 +24,7 @@ class Response{
         return (this.err === null) ? 'success' : 'error';
     }
 
-    stringify(){
+    getFormattedResponse(){
         if (this.err === null){
             return {
                 status: 'success',
@@ -36,6 +36,10 @@ class Response{
                 error: this.err
             };
         }
+    }
+
+    stringify(){
+        return JSON.stringify(this.getFormattedResponse());
     }
 }
 

@@ -13,7 +13,7 @@ module.exports = {
 				host: '127.0.0.1',
 				user: 'root',
 				password: '',
-				database: 'bde'
+				database: 'blindtest'
 			});
 			
 			console.log('Logged into the local database');

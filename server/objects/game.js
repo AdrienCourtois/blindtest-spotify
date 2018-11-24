@@ -1,4 +1,4 @@
-const pool = require('sql').getPool();
+const pool = require('./sql').getPool();
 
 class Game{
     constructor(id, name, theme_id, active, users, points, creation_date){
@@ -12,7 +12,10 @@ class Game{
     }
 
     getUsers(){
-        return this.users.split(',').map(item => parseInt(item));
+        if (this.users.length == 0)
+            return [];
+        else
+            return this.users.split(',').map(item => parseInt(item));
     }
 
     setUsers(users){
@@ -28,7 +31,10 @@ class Game{
     }
 
     getPoints(){
-        return this.points.split(',').map(item => parseInt(item));
+        if (this.points.length == 0)
+            return [];
+        else
+            return this.points.split(',').map(item => parseInt(item));
     }
 
     setPoints(points){
@@ -39,7 +45,7 @@ class Game{
         if (this.id === null || isNaN(this.id) || this.id <= 0){
             var self = this;
 
-            pool.query("INSERT INTO games (name, theme_id) VALUES (?, ?)", [this.name, this.theme_id], function(err, quer){
+            pool.query("INSERT INTO games (name, theme_id, users, points) VALUES (?, ?, '', '')", [this.name, this.theme_id], function(err, quer){
                 self.id = quer.insertId;
                 self.creation_date = "" + new Date();
             });
@@ -69,7 +75,11 @@ class Game{
     static getGameByID(game_id, callback){
         pool.query("SELECT * FROM games WHERE id = ?", [game_id], function(err, quer){
             if (err === null)
-                callback(null, Game.getGame(quer[0]));
+                if (quer.length == 1){
+                    callback(null, Game.getGame(quer[0]));
+                } else {
+                    callback(null, null);
+                }
             else 
                 callback(err, null);
         });

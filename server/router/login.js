@@ -10,8 +10,10 @@ router.post('/login', urlencodedParser, function(req, res){
     var password = req.body.password;
 
     UserService.login(login, password, function(err, user){
+        var response = new Response(err, user);
+
         res.status(200);
-        res.end(new Response(err, user));
+        res.end(response.stringify());
     });
 });
 
@@ -20,8 +22,10 @@ router.post('/register', urlencodedParser, function(req, res){
     var password = req.body.password;
 
     UserService.register(login, password, function(err, user){
+        var response = new Response(err, user);
+
         res.status(200);
-        res.end(new Response(err, user));
+        res.end(response.stringify());
     });
 });
 

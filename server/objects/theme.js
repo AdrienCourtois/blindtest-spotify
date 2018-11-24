@@ -1,3 +1,5 @@
+const pool = require('./sql').getPool();
+
 class Theme{
     constructor(id, name, musics){
         this.id = id;
@@ -12,20 +14,35 @@ class Theme{
     setMusics(musics){
         this.musics = musics.join(',');
     }
-
-    addMusic(music_id){
-        var musics = this.getMusics();
-        musics.push(music_id);
-
-        setMusic(musics);
-    }
     
     commit(){
         if (this.id === null || isNaN(this.id) || this.id <= 0){
-            // insert
+            var self = this;
+
+            pool.query("INSERT INTO themes (name) VALUES (?)", [this.name], function(err, quer){
+                self.id = quer.insertId;
+            });
         } else {
-            // update
+            pool.query("UPDATE themes SET name = ?, musics = ? WHERE id = ?", [this.name, this.musics, this.id]);
         }
+    }
+
+    static getTheme(obj){
+        return new Theme(obj.id, obj.name, obj.musics);
+    }
+
+    static getThemeByID(theme_id, callback){
+        pool.query("SELECT * FROM themes WHERE id = ?", [theme_id], function(err, quer){
+            if (err === null){
+                if (quer.length == 1){
+                    callback(null, Theme.getTheme(quer[0]));
+                } else {
+                    callback(null, null);
+                }
+            } else {
+                callback(err, null);
+            }
+        });
     }
 }
 
