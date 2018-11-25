@@ -6,4 +6,7 @@ export class Game{
     user: string;
     points: string;
     creation_date: string;
+    started: number;
+    current_round: number;
+    max_round: number;
 };

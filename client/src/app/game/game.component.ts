@@ -35,6 +35,6 @@ export class GameComponent implements OnInit {
     this.gameService.leaveGame(this.game, function(status){
       if (status instanceof Success)
         self.router.navigateByUrl('/choose-game');
-    }):
+    });
   }
 }

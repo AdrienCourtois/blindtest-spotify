@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { ResponseNumber } from './responses/response.number';
 import { Success } from './responses/success';
 import { Theme } from './objects/theme';
+import { Router } from '@angular/router';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -22,7 +23,7 @@ const server_url = 'http://localhost:5000/';
 export class GameService {
   currentGame: Game = null;
 
-  constructor(private http: HttpClient, private userService: UserService) { 
+  constructor(private http: HttpClient, private userService: UserService, private router: Router) { 
     try{
       this.currentGame = JSON.parse(localStorage.currentGame) as Game;
     } catch(e) { 
@@ -51,6 +52,11 @@ export class GameService {
         if (response.isError()){
           console.log('Une erreur est survenue :');
           console.log(response.error);
+
+          localStorage.currentGame = null;
+          this.currentGame = null;
+
+          this.router.navigateByUrl('/');
         } else {
           callback(response.data);
         }
@@ -67,6 +73,11 @@ export class GameService {
         if (response.isError()){
           console.log('Une erreur est survenue :');
           console.log(response.error);
+
+          localStorage.currentGame = null;
+          this.currentGame = null;
+
+          this.router.navigateByUrl('/');
         } else {
           localStorage.currentGame = JSON.stringify(response.data);
           callback(response.data);
@@ -117,8 +128,13 @@ export class GameService {
         response = new ResponseGame(response);
 
         if (response.isError()){
-          console.log('Une erreur est surevenue');
+          console.log('Une erreur est survenue');
           console.log(response.error);
+
+          localStorage.currentGame = null;
+          this.currentGame = null;
+
+          this.router.navigateByUrl('/');
         } else {
           localStorage.currentGame = null;
           this.currentGame = null;
@@ -128,8 +144,8 @@ export class GameService {
       });
   }
 
-  createGame(name: string, theme: Theme, callback){
-    var data = "token=" + this.userService.getToken() + "&name=" + name + "&theme_id=" + theme.id;
+  createGame(name: string, theme: Theme, max_round: number, callback){
+    var data = "token=" + this.userService.getToken() + "&name=" + name + "&theme_id=" + theme.id + "&max_round=" + max_round;
     
     this.http.post<ResponseGame>(server_url + 'game/create', data, httpOptions)
       .subscribe(response => {
