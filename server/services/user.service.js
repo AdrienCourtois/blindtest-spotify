@@ -121,6 +121,22 @@ class UserService{
     passwordHash(login, password){
         return md5(login + md5(password));
     }
+
+    getPlayersByIDs(ids, callback){
+        var self = this;
+        var filtered_ids = ids.filter(id => !isNaN(id));
+
+        User.getPlayersByIDs(filtered_ids, function(err, players){
+            if (err === null){
+                callback(null, players);
+            } else {
+                var error = new Error('SQL error at getPlayersByIDs', err, 1);
+                self.errorHandler.push(error);
+
+                callback(error, null);
+            }
+        });
+    }
 }
 
 module.exports = new UserService();

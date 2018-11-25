@@ -26,8 +26,9 @@ router.use(urlencodedParser, function(req, res, next){
 router.post('/create', urlencodedParser, function(req, res){
     var name = req.body.name;
     var theme_id = req.body.theme_id;
+    var max_round = req.body.max_round;
 
-    GameController.createGame(name, theme_id, function(err, game){
+    GameController.createGame(name, theme_id, max_round, function(err, game){
         var response = new Response(err, game);
 
         res.status(200);
@@ -82,6 +83,17 @@ router.post('/points', urlencodedParser, function(req, res){
 router.post('/get', function(req, res){
     GameController.getUserGame(res.locals.user, function(err, game){
         var response = new Response(err, game);
+
+        res.status(200);
+        res.end(response.stringify());
+    });
+});
+
+router.post('/getPlayers', urlencodedParser, function(req, res){
+    var game_id = req.body.game_id;
+
+    GameController.getPlayers(game_id, res.locals.user, function(err, players){
+        var response = new Response(err, players);
 
         res.status(200);
         res.end(response.stringify());

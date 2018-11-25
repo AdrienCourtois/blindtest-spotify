@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dsn-parser": "^1.0.1",

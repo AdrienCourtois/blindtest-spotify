@@ -2,10 +2,10 @@ const ThemeService = require('../services/theme.service');
 const GameService = require('../services/game.service');
 
 class GameController{
-    createGame(name, theme_id, callback){
+    createGame(name, theme_id, max_round, callback){
         ThemeService.getThemeByID(theme_id, function(err, theme){
             if (err === null){
-                GameService.createGame(name, theme, callback);
+                GameService.createGame(name, theme, max_round, callback);
             } else {
                 callback(err, null);
             }
@@ -54,6 +54,18 @@ class GameController{
 
     getUserGame(user, callback){
         GameService.getUserGame(user, callback);
+    }
+
+    getPlayers(game_id, user, callback){
+        GameService.getGameByID(game_id, function(err, game){
+            if (err === null){
+                var playersID = GameService.getPlayers(game, user);
+                
+                UserService.getPlayersByIDs(playersID, callback);
+            } else {
+                callback(err, null);
+            }
+        });
     }
 }
 

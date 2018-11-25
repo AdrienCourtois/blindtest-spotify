@@ -4,9 +4,9 @@ class User{
     constructor(id, login, password, game, token){
         this.id = id;
         this.login = login;
-        this.password = password;
+        this.password = (typeof(password)) ? null : password;
         this.game = (typeof(game) == 'undefined') ? 0 : game;
-        this.token = token;
+        this.token = (typeof(token)) ? null : token;
     }
 
     inGame(){
@@ -84,6 +84,26 @@ class User{
                 } else {
                     callback(null, null);
                 }
+            } else {
+                callback(err, null);
+            }
+        });
+    }
+
+    static getPlayersByIDs(ids, callback){
+        var where_clause = "0=1";
+
+        for (var i = 0 ; i < ids.length ; i++)
+            where_clause += " OR id = " + ids[i];
+
+        pool.query("SELECT id, login, game FROM users WHERE " + where_clause, function(err, quer){
+            if (err === null){
+                var results = [];
+
+                for (var i = 0 ; i < quer.length ; i++)
+                    results.push(User.getUser(quer[i]));
+                
+                callback(null, results);
             } else {
                 callback(err, null);
             }

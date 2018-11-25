@@ -190,12 +190,12 @@ class GameService{
      * @param {Theme} theme_id The ID of the theme for the game.
      * @param {gameCallback} callback The callback function taking the game as parameters if it has been created and null if there was an error.
      */
-    createGame(name, theme, callback){
+    createGame(name, theme, max_round, callback){
         if (name.length > 1){
             var new_game = Game.getGame({
                 theme_id: theme.id,
-                active: 1,
-                name: name
+                name: name,
+                max_round: max_round
             });
 
             new_game.commit();
@@ -234,6 +234,23 @@ class GameService{
                 callback(error, null);
             }
         });
+    }
+
+    /**
+     * Retrieves the players ID from a given game
+     * @param {Game} game The game
+     * @param {User} user The user asking for it -- for security
+     * @returns {number[]}
+     */
+    getPlayers(game, user){
+        if (this.hasUser(game, user)){
+            return game.getUsers();
+        } else {
+            var error = new Error('Security error at getPlayers', 'Vous n\'avez pas accès à cette fonctionnalité.', 2);
+            self.errorHandler.push(error);
+        }
+
+        return null;
     }
 }
 
