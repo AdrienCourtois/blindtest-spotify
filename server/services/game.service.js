@@ -262,6 +262,7 @@ class GameService{
     startGame(game, user, callback){
         if (this.hasUser(game, user)){
             game.setStarted(true);
+            game.setRound(1);
             game.commit();
 
             callback(null, game);

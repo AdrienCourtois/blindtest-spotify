@@ -1,5 +1,6 @@
 const ThemeService = require('../services/theme.service');
 const GameService = require('../services/game.service');
+const UserService = require('../services/user.service');
 
 class GameController{
     createGame(name, theme_id, max_round, callback){

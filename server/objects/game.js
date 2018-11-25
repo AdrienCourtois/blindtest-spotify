@@ -14,6 +14,14 @@ class Game{
         this.max_round = (typeof(max_round) == "undefined") ? 20 : max_round;
     }
 
+    getRound(){
+        return this.current_round;
+    }
+
+    setRound(round){
+        this.current_round = round;
+    }
+
     getUsers(){
         if (this.users.length == 0)
             return [];
