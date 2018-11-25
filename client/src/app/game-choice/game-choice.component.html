@@ -1,0 +1,39 @@
+<a (click)="showCreateGame()">Créer une partie</a>
+
+<div *ngIf="creatingGame">
+  <div *ngIf="createGameForm">
+    <form [formGroup]="createGameForm" (ngSubmit)="createGame()">
+      <div class="form-group">
+        <label for="login">Nom de la partie :</label>
+        <input type="text" name="login" class="form-control" formControlName="name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="theme">Thème :</label>
+        <select name="theme" formControlName="theme" class="form-control" required>
+          <option *ngFor="let theme of themes" [ngValue]="theme">{{theme.name}}</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-success">Créer</button>
+    </form>
+  </div>
+
+  <div *ngIf="!createGameForm">
+    Chargement...
+  </div>
+</div>
+
+<div *ngIf="games">
+  <div *ngFor="let game of games" (click)="chooseGame(game)">
+    {{game.name}}
+  </div>
+  
+  <div *ngIf="games.length == 0">
+    Il n'y a aucune partie pour l'instant. Créez-en une !
+  </div>
+</div>
+
+<div *ngIf="!games">
+  Chargement...
+</div>
