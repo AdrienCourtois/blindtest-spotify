@@ -4,9 +4,9 @@ class User{
     constructor(id, login, password, game, token){
         this.id = id;
         this.login = login;
-        this.password = (typeof(password)) ? null : password;
+        this.password = (typeof(password) == 'undefined') ? null : password;
         this.game = (typeof(game) == 'undefined') ? 0 : game;
-        this.token = (typeof(token)) ? null : token;
+        this.token = (typeof(token) == 'undefined') ? null : token;
     }
 
     inGame(){

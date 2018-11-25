@@ -45,7 +45,10 @@ class GameController{
             if (err === null){
                 var points = GameService.getUserPoints(game, user);
 
-                callback(null, points);
+                if (GameService.errorHandler.length != 0)
+                    callback(GameService.errorHandler[0], null);
+                else
+                    callback(null, points);
             } else {
                 callback(err, null);
             }
