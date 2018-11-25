@@ -27,6 +27,21 @@ class ThemeService{
             }
         });
     }
+
+    getAllThemes(callback){
+        var self = this;
+
+        Theme.getAllThemes(function(err, themes){
+            if (err === null){
+                callback(null, themes);
+            } else {
+                var error = new Error('SQL error in getAllThemes', err, 1);
+                self.errorHandler.push(error);
+
+                callback(error, null);
+            }
+        });  
+    }
 }
 
 module.exports = new ThemeService();

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const urlencodedParser = require('body-parser').urlencoded({ extended: false });
+const urlencodedParser = require('body-parser').urlencoded({ extended: true });
 
 const UserService = require('../services/user.service');
 const Response = require('./response');

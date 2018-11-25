@@ -44,6 +44,21 @@ class Theme{
             }
         });
     }
+
+    static getAllThemes(callback){
+        pool.query("SELECT * FROM themes", function(err, quer){
+            if (err === null){
+                var results = [];
+
+                for (var i = 0 ; i < quer.length ; i++)
+                    results.push(Theme.getTheme(quer[i]));
+                
+                callback(null, results);
+            } else {
+                callback(err, null);
+            }
+        });
+    }
 }
 
 module.exports = Theme;
