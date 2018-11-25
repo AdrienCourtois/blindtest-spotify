@@ -9,4 +9,12 @@ export class Game{
     started: number;
     current_round: number;
     max_round: number;
+
+    hasStarted(): boolean{
+        return this.started == 1;
+    }
+
+    getRound(): number{
+        return this.current_round;
+    }
 };

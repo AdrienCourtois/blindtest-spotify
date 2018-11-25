@@ -24,7 +24,7 @@ export class ThemeService {
 
     this.http.post<ResponseThemeArray>(server_url + 'theme/all', data, httpOptions)
       .subscribe(response => {
-        response = new ResponseThemeArray(response);
+        response = Object.assign(new ResponseThemeArray(), response);
 
         if (response.isError()){
           console.log('Une erreur est survenue :');

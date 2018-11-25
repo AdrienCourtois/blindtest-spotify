@@ -1,5 +1,19 @@
-<p>
-  Partie actuelle : {{game.name}} <br />
-  Vous avez <strong>{{points}}</strong> points <br />
+Partie actuelle : {{game.name}} <br />
+Vous avez <strong>{{points}}</strong> points <br />
+
+<div *ngIf="!game.hasStarted()">
+  <h4>Joueurs dans la partie</h4>
+  <div *ngIf="players">
+    <li *ngFor="let player of players">{{player.login}}</li>
+  </div>
+  <div *ngIf="!players">
+    Chargement...
+  </div>
+
+  <a class="btn btn-primary" (click)="startGame()">Commencer la partie</a> - 
   <a (click)="leaveGame()">Quitter la partie</a>
-</p>
+</div>
+
+<div *ngIf="game.hasStarted()">
+  <h2>Round {{game.getRound()}}</h2>
+</div>

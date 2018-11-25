@@ -17,6 +17,7 @@ export class GameChoiceComponent implements OnInit {
   creatingGame: boolean = false;
   createGameForm: FormGroup;
   themes: Theme[];
+  refresh: any;
 
   constructor(private formBuilder: FormBuilder, 
               private gameService: GameService,
@@ -27,6 +28,11 @@ export class GameChoiceComponent implements OnInit {
   }
 
   ngOnInit() {
+    var self = this;
+    this.refresh = setInterval(function(){ self.refreshAvailableGames(); }, 2000);
+  }
+
+  refreshAvailableGames(){
     var self = this;
 
     this.gameService.getAllAvailableGames(function(games){
@@ -77,5 +83,9 @@ export class GameChoiceComponent implements OnInit {
         self.creatingGame = false;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
   }
 }

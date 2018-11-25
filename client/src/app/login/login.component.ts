@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { UserService } from '../user.service';
+import { Success } from '../responses/success';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,9 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService) { }
+  constructor(private formBuilder: FormBuilder, 
+              private userService: UserService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -31,8 +35,9 @@ export class LoginComponent implements OnInit {
     var login = this.loginForm.controls.login.value;
     var password = this.loginForm.controls.password.value;
 
-    this.userService.login(login, password, function(result){
-      console.log(result);
+    this.userService.login(login, password, function(status){
+      if (status instanceof Success)
+        this.router.navigateByUrl('/');
     });
   }
 

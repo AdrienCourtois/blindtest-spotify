@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
 import { User } from './objects/user';
 import { ResponseUser } from './responses/response.user';
 import { Router } from '@angular/router';
+import { Success } from './responses/success';
+
+const server_url = 'http://localhost:5000/';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,21 +22,22 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router) {
     try{
-      this.user = JSON.parse(localStorage.user) as User;
+      this.user = Object.assign(new User, JSON.parse(localStorage.user));
     } catch(e){ }
   }
 
   login(login: string, password: string, callback): void{
     var data = "login=" + login + "&password=" + password;
 
-    this.http.post<ResponseUser>('http://localhost:5000/user/login', data, httpOptions)
+    this.http.post<ResponseUser>(server_url + 'user/login', data, httpOptions)
       .subscribe(response => {
-        response = new ResponseUser(response);
+        response = Object.assign(new ResponseUser(), response);
 
         if (response.isError()){
           callback(response.data);
         } else {
-          callback('success');
+          callback(new Success());
+
           this.setUser(response.data);
           this.router.navigateByUrl[''];
         }
@@ -47,7 +50,6 @@ export class UserService {
   }
 
   isLogged(): boolean {
-    console.log(this.user);
     return this.user !== null;
   }
 
