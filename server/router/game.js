@@ -100,4 +100,15 @@ router.post('/getPlayers', urlencodedParser, function(req, res){
     });
 });
 
+router.post('/start', urlencodedParser, function(req, res){
+    var game_id = req.body.game_id;
+
+    GameController.startGame(game_id, res.locals.user, function(err, game){
+        var response = new Response(err, game);
+
+        res.status(200);
+        res.end(response.stringify());
+    });
+});
+
 module.exports = router;

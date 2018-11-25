@@ -252,6 +252,23 @@ class GameService{
 
         return null;
     }
+
+    /**
+     * Starts the game
+     * @param {Game} game The given game
+     * @param {User} user The user that's asking for it -- for security
+     * @param {gameCallback} callback The callback function taking the updated game as argumnet.
+     */
+    startGame(game, user, callback){
+        if (this.hasUser(game, user)){
+            game.setStarted(true);
+            game.commit();
+
+            callback(null, game);
+        } else {
+            var error = new Error('Security error at startGame', 'Vous n\'avez pas accès à cette fonctionnalité', 2);
+        }
+    }
 }
 
 module.exports = new GameService();

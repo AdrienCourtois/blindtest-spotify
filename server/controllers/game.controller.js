@@ -70,6 +70,16 @@ class GameController{
             }
         });
     }
+
+    startGame(game_id, user, callback){
+        GameService.getGameByID(game_id, function(err, game){
+            if (err === null){
+                GameService.startGame(game, user, callback);
+            } else {
+                callback(err, null);
+            }
+        });
+    }
 }
 
 module.exports = new GameController();
