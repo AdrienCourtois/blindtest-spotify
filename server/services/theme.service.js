@@ -42,6 +42,13 @@ class ThemeService{
             }
         });  
     }
+
+    getRandomMusicID(theme){
+        var nb_musics = theme.getMusics().length;
+        var random_number = Math.floor(nb_musics * Math.random());
+
+        return theme.getMusics()[random_number];
+    }
 }
 
 module.exports = new ThemeService();

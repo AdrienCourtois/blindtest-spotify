@@ -111,4 +111,16 @@ router.post('/start', urlencodedParser, function(req, res){
     });
 });
 
+router.post('/getRound', urlencodedParser, function(req, res){
+    var game_id = req.body.game_id;
+    var round_nb = req.body.round_nb;
+
+    GameController.getGameRound(game_id, round_nb, res.locals.user, function(err, round){
+        var response = new Response(err, round);
+
+        res.status(200);
+        res.end(response.stringify());
+    });
+});
+
 module.exports = router;

@@ -13,5 +13,8 @@ app.use('/game', game_router);
 const theme_router = require('./router/theme');
 app.use('/theme', theme_router);
 
+const music_router = require('./router/music');
+app.use('/music', music_router);
+
 
 app.listen(process.env.PORT || 5000, () => console.log('Server started, listening on port 5000'));

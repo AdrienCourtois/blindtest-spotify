@@ -8,7 +8,10 @@ class Theme{
     }
 
     getMusics(){
-        return this.musics.split(',').map(item => parseInt(item));
+        if (this.musics.length == 0)
+            return [];
+        else
+            return this.musics.split(',').map(item => parseInt(item));
     }
 
     setMusics(musics){
